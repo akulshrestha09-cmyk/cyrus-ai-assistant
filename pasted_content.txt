@@ -1,0 +1,161 @@
+Here is your complete 3-day execution plan, starter code, and project layout for the \*\*Pure-Python Web App\*\*. We'll build a \*\*Local AI Code & Document Assistant\*\* using \*\*Reflex\*\* (100% Python web framework) and \*\*Ollama\*\* (for local LLMs).
+\## 🛠️ Project Architecture & File Structure
+\`\`\`text
+ai\_assistant/
+│
+├── rxconfig.py              # Reflex app configuration
+├── requirements.txt         # Project dependencies
+└── ai\_assistant/
+    ├── \_\_init\_\_.py
+    ├── ai\_assistant.py      # Main UI layout & entry point
+    └── state.py             # App logic & Ollama integration
+
+\`\`\`
+\## 🚀 Step-by-Step Implementation
+\### Step 1: Set Up Dependencies (requirements.txt)
+Create requirements.txt and install the packages:
+\`\`\`text
+reflex\>=0.6.0
+ollama\>=0.4.0
+
+\`\`\`
+\`\`\`bash
+pip install -r requirements.txt
+\# Make sure Ollama is installed and running locally with a lightweight model:
+\# ollama pull llama3.2:1b
+
+\`\`\`
+\### Step 2: Build the Core App State (ai\_assistant/state.py)
+This handles the async streaming response from your local LLM directly into the UI state without any JavaScript.
+\`\`\`python
+import reflex as rx
+import ollama
+
+class QAItem(rx.Base):
+    question: str
+    answer: str
+
+class State(rx.State):
+    """The app state for managing chat history and LLM interaction."""
+    
+    # User inputs
+    question: str = ""
+    chat\_history: list\[QAItem\] = \[\]
+    
+    # UI states
+    is\_processing: bool = False
+    
+    async def process\_question(self):
+        """Send question to local LLM and stream response."""
+        if not self.question.strip():
+            return
+            
+        user\_prompt = self.question
+        self.question = ""  # Clear input
+        self.is\_processing = True
+        
+        # Add new item to history with empty answer initially
+        new\_qa = QAItem(question=user\_prompt, answer="")
+        self.chat\_history.append(new\_qa)
+        yield
+        
+        try:
+            # Stream response from local Ollama model
+            response\_stream = ollama.chat(
+                model='llama3.2:1b',
+                messages=\[{'role': 'user', 'content': user\_prompt}\],
+                stream=True,
+            )
+            
+            for chunk in response\_stream:
+                content = chunk\['message'\]\['content'\]
+                self.chat\_history\[-1\].answer += content
+                yield  # Real-time UI update
+                
+        except Exception as e:
+            self.chat\_history\[-1\].answer = f"⚠️ Error connecting to local model: {str(e)}"
+            
+        finally:
+            self.is\_processing = False
+            yield
+
+\`\`\`
+\### Step 3: Create the Pure-Python UI (ai\_assistant/ai\_assistant.py)
+\`\`\`python
+import reflex as rx
+from ai\_assistant.state import State, QAItem
+
+def message\_card(qa: QAItem) -\> rx.Component:
+    """Render a single Q&A card in chat history."""
+    return rx.vstack(
+        # User Question
+        rx.box(
+            rx.text(qa.question, weight="bold", color="var(--gray-12)"),
+            padding="12px 16px",
+            background\_color="var(--accent-3)",
+            border\_radius="12px",
+            align\_self="flex-end",
+            max\_width="80%",
+        ),
+        # AI Answer (Supports Markdown rendering)
+        rx.box(
+            rx.markdown(qa.answer),
+            padding="12px 16px",
+            background\_color="var(--gray-3)",
+            border\_radius="12px",
+            align\_self="flex-start",
+            max\_width="85%",
+        ),
+        spacing="3",
+        width="100%",
+    )
+
+def index() -\> rx.Component:
+    """Main App Layout."""
+    return rx.container(
+        rx.vstack(
+            # Header
+            rx.heading("⚡ Local AI Assistant", size="7", margin\_bottom="2"),
+            rx.text("Pure Python • Zero JS • 100% Offline LLM", color="gray"),
+            rx.divider(),
+            
+            # Chat Container
+            rx.scroll\_area(
+                rx.vstack(
+                    rx.foreach(State.chat\_history, message\_card),
+                    spacing="4",
+                    width="100%",
+                ),
+                height="60vh",
+                width="100%",
+                padding="4",
+            ),
+            
+            # Input Controls
+            rx.hstack(
+                rx.input(
+                    placeholder="Ask your local model anything...",
+                    value=State.question,
+                    on\_change=State.set\_question,
+                    on\_key\_down=lambda key: rx.cond(key == "Enter", State.process\_question(), None),
+                    width="100%",
+                    size="3",
+                ),
+                rx.button(
+                    "Send",
+                    on\_click=State.process\_question,
+                    loading=State.is\_processing,
+                    size="3",
+                ),
+                width="100%",
+                margin\_top="4",
+            ),
+            spacing="4",
+            max\_width="800px",
+            padding="6",
+        ),
+        center\_content=True,
+    )
+
+app = rx.App()
+app.add\_page(index)
