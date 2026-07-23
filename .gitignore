@@ -2,3 +2,4 @@ vnev/
 vnev/ 
 web/ 
 __pycache__/ 
+.states/ 
