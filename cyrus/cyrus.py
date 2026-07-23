@@ -1,5 +1,5 @@
 import reflex as rx
-from ai_assistant.state import State
+from cyrus.state import State
 
 def message_card(qa: dict) -> rx.Component:
     """Render a single Q&A card in chat history."""
@@ -31,7 +31,7 @@ def index() -> rx.Component:
     return rx.container(
         rx.vstack(
             # Header
-            rx.heading("⚡ Local AI Assistant", size="7", margin_bottom="2"),
+            rx.heading("⚡ CYRUS", size="7", margin_bottom="2"),
             rx.text("Pure Python • Zero JS • 100% Offline LLM", color="gray"),
             rx.divider(),
             

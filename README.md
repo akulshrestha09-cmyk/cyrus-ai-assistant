@@ -1,4 +1,5 @@
-\# 🚀 Local AI Code \& Document Assistant
+\# 🚀 # 🚀 Cyrus - Local AI Code & Document Assistant
+
 
 
 
