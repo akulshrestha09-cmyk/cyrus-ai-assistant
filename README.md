@@ -28,7 +28,6 @@ A full-stack, 100% offline local AI web application built with \*\*Python\*\*, \
 \- \*\*Model:\*\* Meta Llama 3.2 (1B)
 
 
-
 \## 🚀 How to Run Locally
 
 
