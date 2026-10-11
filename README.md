@@ -1,47 +1,37 @@
-\# 🚀 # 🚀 Cyrus - Local AI Code & Document Assistant
+# ⚡ Cyrus — Full-Stack AI Assistant
 
+A responsive, full-stack AI web assistant built entirely in pure Python using **Reflex**, featuring fast cloud inference via **Groq** and support for private, offline local execution with **Ollama**.
 
+---
 
+## 🌐 Live Demo
 
-A full-stack, 100% offline local AI web application built with \*\*Python\*\*, \*\*Reflex\*\*, and \*\*Ollama\*\*.
+Explore the live web application here:  
+👉 **[an-sun.reflex.run](https://an-sun.reflex.run)**
 
+---
 
+## ✨ Features
 
-\## ✨ Features
+- **Pure Python Full-Stack:** Clean, reactive web interface and asynchronous state management written 100% in Python using **Reflex** (zero JavaScript required).
+- **High-Speed Cloud Inference:** Seamlessly deployed using **Groq API** (`llama-3.2`) for near-instant token streaming.
+- **Local & Offline Mode Ready:** Supports running completely offline with local model weights powered by **Ollama** (`llama3.2:1b`).
+- **Markdown & Code Rendering:** Formats responses in real time with syntax highlighting, lists, and formatted text.
 
-\- \*\*100% Private \& Offline:\*\* Runs locally on your machine with zero data leaving your hardware.
+---
 
-\- \*\*Pure Python Full-Stack:\*\* Frontend UI and backend state management built entirely in Python using \*\*Reflex\*\*.
+## 🛠️ Tech Stack
 
-\- \*\*Real-Time Streaming:\*\* Streams response tokens asynchronously from \*\*Ollama\*\* (`llama3.2:1b`).
+- **Frontend & Backend Framework:** [Reflex](https://reflex.dev) (Python)
+- **Cloud LLM Acceleration:** Groq API (OpenAI-compatible client)
+- **Local LLM Engine:** Ollama (`llama3.2:1b`)
+- **Deployment Platform:** Reflex Cloud
 
-\- \*\*Markdown Support:\*\* Renders formatted text, code snippets, and lists seamlessly.
+---
 
+## 🚀 Getting Started Locally
 
-
-\## 🛠️ Tech Stack
-
-\- \*\*Framework:\*\* Reflex (Python)
-
-\- \*\*AI Inference Engine:\*\* Ollama
-
-\- \*\*Model:\*\* Meta Llama 3.2 (1B)
-
-
-
-\## 🚀 How to Run Locally
-
-
-
-\### Prerequisites
-
-1\. Install \[Ollama](https://ollama.com).
-
-2\. Pull the model:
-
-&#x20;  ```bash
-
-&#x20;  ollama pull llama3.2:1b
-
-
-
+### 1. Clone the Repository
+```bash
+git clone [https://github.com/akulshrestha09-cmyk/cyrus-ai-assistant.git](https://github.com/akulshrestha09-cmyk/cyrus-ai-assistant.git)
+cd cyrus-ai-assistant
